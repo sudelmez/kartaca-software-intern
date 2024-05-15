@@ -1,31 +1,25 @@
 package com.springbackend.app.controller;
-import java.util.List;
-import java.util.Optional;
+
+import com.springbackend.app.exception.ServerException;
+import com.springbackend.app.entity.Earthquake;
+import com.springbackend.app.service.EarthquakeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import com.springbackend.app.exception.RecordNotFoundException;
-import com.springbackend.app.exception.ServerException;
-import com.springbackend.app.model.Earthquake;
-import com.springbackend.app.service.EarthquakeService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("/")
 public class EarthquakeController {
 
-	@Autowired
-	EarthquakeService earthService;
+	private final EarthquakeService earthService;
 
-	@GetMapping("/")
-	public String getGreeting() {
-		return "Hello spring boot application!!";
+	@Autowired
+	public EarthquakeController(EarthquakeService earthService) {
+		this.earthService = earthService;
 	}
 
 	@GetMapping("earthquakes")
