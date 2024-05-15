@@ -1,42 +1,42 @@
 package com.springbackend.app.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.springbackend.app.repository.EarthquakeRepository;
+import com.springbackend.app.entity.Earthquake;
+import com.springbackend.app.exception.ServerException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.springbackend.app.dao.EarthquakeDao;
-import com.springbackend.app.model.Earthquake;
-import com.springbackend.app.exception.ServerException;
+import java.util.List;
 
 @Service
+@Slf4j
 public class EarthquakeService {
 
 	@Autowired
-	EarthquakeDao earthDao;
+	private EarthquakeRepository earthquakeRepository;
 
 	public List<Earthquake> getAll() {
-		return earthDao.findAll();
+		return earthquakeRepository.findAll();
 	}
 
 	public Earthquake save(Earthquake newEarthquake) {
         try {
-            return earthDao.save(newEarthquake);
+            return earthquakeRepository.save(newEarthquake);
         } catch (Exception e) {
-            System.err.println("Error while saving earthquake data: " + e.getMessage());
+            log.error("Error while saving earthquake data", e);
             throw new ServerException();
         }
     }
     public void cleanEarthquakeData() {
         try {
-            List<Earthquake> earthquakes = earthDao.findAll();
+            List<Earthquake> earthquakes = earthquakeRepository.findAll();
             if (!earthquakes.isEmpty()) {
                 Earthquake latestEarthquake = earthquakes.get(0);
-                earthDao.delete(latestEarthquake);
+                earthquakeRepository.delete(latestEarthquake);
             }
         } catch (Exception e) {
-            System.err.println("Error while cleaning earthquake data: " + e.getMessage());
+            log.error("Error while cleaning earthquake data", e);
             throw new ServerException();
         }
     }
